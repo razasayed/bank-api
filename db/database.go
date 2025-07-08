@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"os"
 
 	_ "github.com/lib/pq"
 )
@@ -11,8 +12,15 @@ import (
 var DB *sql.DB
 
 func Connect() {
+	user := os.Getenv("DB_USER")
+	pass := os.Getenv("DB_PASS")
+	host := os.Getenv("DB_HOST")
+	port := os.Getenv("DB_PORT")
+	name := os.Getenv("DB_NAME")
+	ssl := os.Getenv("SSL_MODE")
+	dsn := fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=%s", user, pass, host, port, name, ssl)
+
 	var err error
-	dsn := "postgres://postgres:mysecretpassword@localhost:5432/postgres?sslmode=disable"
 	DB, err = sql.Open("postgres", dsn)
 
 	if err != nil {
