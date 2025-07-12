@@ -28,6 +28,11 @@ func CreateTransactionHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if input.Amount < 0 {
+		utils.WriteJSONError(w, utils.ErrInvalidAmount, http.StatusBadRequest)
+		return
+	}
+
 	if !models.OperationTypeExists(input.OperationTypeID) {
 		utils.WriteJSONError(w, utils.ErrInvalidOperationTypeID, http.StatusBadRequest)
 		return
@@ -35,6 +40,10 @@ func CreateTransactionHandler(w http.ResponseWriter, r *http.Request) {
 
 	transaction, err := models.CreateTransaction(input.AccountID, input.OperationTypeID, input.Amount)
 	if err != nil {
+		if err.Error() == utils.ErrAccountNotFound {
+			utils.WriteJSONError(w, utils.ErrAccountNotFound, http.StatusNotFound)
+			return
+		}
 		utils.WriteJSONError(w, "Failed to create transaction: "+err.Error(), http.StatusInternalServerError)
 		return
 	}

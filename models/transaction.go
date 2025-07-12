@@ -2,6 +2,9 @@ package models
 
 import (
 	"bank-api/db"
+	"bank-api/utils"
+	"errors"
+	"strings"
 	"time"
 )
 
@@ -15,7 +18,7 @@ type Transaction struct {
 
 func CreateTransaction(accountID, operationTypeID int, amount float64) (*Transaction, error) {
 	// Enforce business rule: only payments (operation type 4) can be positive
-	if operationTypeID != 4 && amount > 0 {
+	if operationTypeID != utils.OperationTypePayment {
 		amount = -amount
 	}
 
@@ -28,6 +31,9 @@ func CreateTransaction(accountID, operationTypeID int, amount float64) (*Transac
 		Scan(&transaction.TransactionID, &transaction.AccountID, &transaction.OperationTypeID, &transaction.Amount, &transaction.EventDate)
 
 	if err != nil {
+		if strings.Contains(err.Error(), "violates foreign key constraint") {
+			return nil, errors.New(utils.ErrAccountNotFound)
+		}
 		return nil, err
 	}
 
