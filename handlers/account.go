@@ -49,7 +49,7 @@ func GetAccountHandler(w http.ResponseWriter, r *http.Request) {
 	idStr := strings.TrimPrefix(r.URL.Path, "/accounts/")
 	id, err := strconv.Atoi(idStr)
 	if err != nil {
-		utils.WriteJSONError(w, utils.ErrInvalidAccountID, http.StatusBadRequest)
+		utils.WriteJSONError(w, utils.ErrAccountNotFound, http.StatusBadRequest)
 		return
 	}
 
