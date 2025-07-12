@@ -2,7 +2,11 @@ package main
 
 import (
 	"bank-api/db"
+	"bank-api/router"
+	"fmt"
 	"log"
+	"net/http"
+	"os"
 
 	"github.com/joho/godotenv"
 )
@@ -14,4 +18,12 @@ func main() {
 	}
 
 	db.Connect()
+	router.InitRoutes()
+
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
+	fmt.Println("Server listening on port " + port)
+	log.Fatal(http.ListenAndServe(":"+port, nil))
 }
