@@ -12,6 +12,25 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
       - ./docker-init:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 2s
+      timeout: 3s
+      retries: 10
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: api
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    command: ["./main"]
 
 volumes:
   pgdata:
