@@ -7,17 +7,26 @@ import (
 	"net/http"
 )
 
+// CreateTransactionHandler godoc
+// @Summary Create a new transaction
+// @Description Creates a transaction for a given account with a valid operation type and amount
+// @Tags transactions
+// @Accept  json
+// @Produce  json
+// @Param transaction body models.CreateTransactionInput true "Create Transaction input"
+// @Success 201 {object} models.Transaction
+// @Failure 400 {object} models.ErrorResponse
+// @Failure 404 {object} models.ErrorResponse
+// @Failure 405 {object} models.ErrorResponse
+// @Failure 500 {object} models.ErrorResponse
+// @Router /transactions [post]
 func CreateTransactionHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		utils.WriteJSONError(w, utils.ErrMethodNotAllowed, http.StatusMethodNotAllowed)
 		return
 	}
 
-	var input struct {
-		AccountID       int     `json:"account_id"`
-		OperationTypeID int     `json:"operation_type_id"`
-		Amount          float64 `json:"amount"`
-	}
+	var input models.CreateTransactionInput
 	if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
 		utils.WriteJSONError(w, utils.ErrInvalidJSON, http.StatusBadRequest)
 		return

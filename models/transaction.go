@@ -9,11 +9,11 @@ import (
 )
 
 type Transaction struct {
-	TransactionID   int       `json:"transaction_id"`
-	AccountID       int       `json:"account_id"`
-	OperationTypeID int       `json:"operation_type_id"`
-	Amount          float64   `json:"amount"`
-	EventDate       time.Time `json:"event_date"`
+	TransactionID   int       `json:"transaction_id" example:"101"`
+	AccountID       int       `json:"account_id" example:"1"`
+	OperationTypeID int       `json:"operation_type_id" example:"4"`
+	Amount          float64   `json:"amount" example:"100.00"`
+	EventDate       time.Time `json:"event_date" example:"2025-10-01T12:00:00Z"`
 }
 
 func CreateTransaction(accountID, operationTypeID int, amount float64) (*Transaction, error) {

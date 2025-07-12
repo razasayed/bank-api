@@ -9,8 +9,8 @@ import (
 var ErrAccountNotFound = errors.New("account not found")
 
 type Account struct {
-	AccountID      int    `json:"account_id"`
-	DocumentNumber string `json:"document_number"`
+	AccountID      int    `json:"account_id"  example:"1"`
+	DocumentNumber string `json:"document_number" example:"12345678900"`
 }
 
 func GetAccountByID(id int) (*Account, error) {

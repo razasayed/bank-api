@@ -1,0 +1,163 @@
+definitions:
+  models.Account:
+    properties:
+      account_id:
+        example: 1
+        type: integer
+      document_number:
+        example: "12345678900"
+        type: string
+    type: object
+  models.CreateAccountInput:
+    properties:
+      document_number:
+        example: "12345678900"
+        type: string
+    type: object
+  models.CreateTransactionInput:
+    properties:
+      account_id:
+        example: 1
+        type: integer
+      amount:
+        example: 123.45
+        type: number
+      operation_type_id:
+        example: 4
+        type: integer
+    type: object
+  models.ErrorResponse:
+    properties:
+      error:
+        type: string
+    type: object
+  models.Transaction:
+    properties:
+      account_id:
+        example: 1
+        type: integer
+      amount:
+        example: 100
+        type: number
+      event_date:
+        example: "2025-10-01T12:00:00Z"
+        type: string
+      operation_type_id:
+        example: 4
+        type: integer
+      transaction_id:
+        example: 101
+        type: integer
+    type: object
+info:
+  contact: {}
+paths:
+  /accounts:
+    post:
+      consumes:
+      - application/json
+      description: Creates a customer account with the provided document number
+      parameters:
+      - description: Create Account input
+        in: body
+        name: account
+        required: true
+        schema:
+          $ref: '#/definitions/models.CreateAccountInput'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.Account'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "405":
+          description: Method Not Allowed
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Create a new account
+      tags:
+      - accounts
+  /accounts/{id}:
+    get:
+      description: Retrieve account information by account ID
+      parameters:
+      - description: Account ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Account'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "405":
+          description: Method Not Allowed
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Get account by ID
+      tags:
+      - accounts
+  /transactions:
+    post:
+      consumes:
+      - application/json
+      description: Creates a transaction for a given account with a valid operation
+        type and amount
+      parameters:
+      - description: Create Transaction input
+        in: body
+        name: transaction
+        required: true
+        schema:
+          $ref: '#/definitions/models.CreateTransactionInput'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.Transaction'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "405":
+          description: Method Not Allowed
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Create a new transaction
+      tags:
+      - transactions
+swagger: "2.0"

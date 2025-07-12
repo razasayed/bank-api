@@ -10,6 +10,18 @@ import (
 	"strings"
 )
 
+// CreateAccountHandler godoc
+// @Summary Create a new account
+// @Description Creates a customer account with the provided document number
+// @Tags accounts
+// @Accept  json
+// @Produce  json
+// @Param account body models.CreateAccountInput true "Create Account input"
+// @Success 201 {object} models.Account
+// @Failure 400 {object} models.ErrorResponse
+// @Failure 405 {object} models.ErrorResponse
+// @Failure 500 {object} models.ErrorResponse
+// @Router /accounts [post]
 func CreateAccountHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		utils.WriteJSONError(w, utils.ErrMethodNotAllowed, http.StatusMethodNotAllowed)
@@ -40,6 +52,18 @@ func CreateAccountHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(account)
 }
 
+// GetAccountHandler godoc
+// @Summary Get account by ID
+// @Description Retrieve account information by account ID
+// @Tags accounts
+// @Produce json
+// @Param id path int true "Account ID"
+// @Success 200 {object} models.Account
+// @Failure 400 {object} models.ErrorResponse
+// @Failure 404 {object} models.ErrorResponse
+// @Failure 405 {object} models.ErrorResponse
+// @Failure 500 {object} models.ErrorResponse
+// @Router /accounts/{id} [get]
 func GetAccountHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
 		utils.WriteJSONError(w, utils.ErrMethodNotAllowed, http.StatusMethodNotAllowed)
